@@ -1,0 +1,25 @@
+{
+    "name": "tasl",
+    "displayName": "tasl",
+    "description": "Syntax highlighting for the tasl schema language",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.56.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "tasl",
+            "aliases": ["tasl", "tasl"],
+            "extensions": [".tasl"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "tasl",
+            "scopeName": "source.tasl",
+            "path": "./syntaxes/tasl.tmLanguage.json"
+        }]
+    }
+}
