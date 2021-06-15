@@ -46,8 +46,7 @@
 			},
 			"end": "$",
 			"patterns": [
-				{ "include": "#comment" },
-				{ "include": "#key" },
+				{ "include": "#term" },
 				{ "include": "#export" },
 				{ "include": "#expression" }
 			]
@@ -59,8 +58,7 @@
 			},
 			"end": "$",
 			"patterns": [
-				{ "include": "#comment" },
-				{ "include": "#key" },
+				{ "include": "#term" },
 				{ "include": "#export" },
 				{ "match": "=/", "name": "punctuation.separator.tasl.edge.source" },
 				{ "match": "/=>", "name": "punctuation.separator.tasl.edge.target" },
@@ -84,11 +82,7 @@
 			]
 		},
 		"literal": {
-			"match": "<(\\S+)>",
-			"name": "constant.numeric.tasl.literal",
-			"captures": {
-				"1": { "patterns": [{ "include": "#key" }] }
-			}
+			"patterns": [{ "include": "#term" }]
 		},
 		"uri": {
 			"match": "<>",
@@ -105,7 +99,7 @@
 			},
 			"patterns": [
 				{ "include": "#comment" },
-				{ "include": "#key" },
+				{ "include": "#term" },
 				{
 					"match": "->",
 					"name": "punctuation.separator.tasl.component"
@@ -126,7 +120,7 @@
 			},
 			"patterns": [
 				{ "include": "#comment" },
-				{ "include": "#key" },
+				{ "include": "#term" },
 				{
 					"match": "<-",
 					"name": "punctuation.separator.tasl.option"
@@ -138,7 +132,7 @@
 			"match": "(\\*)\\s*(\\S+)",
 			"captures": {
 				"1": { "name": "keyword.operator" },
-				"2": { "patterns": [{ "include": "#key" }] }
+				"2": { "patterns": [{ "include": "#term" }] }
 			}
 		},
 		"variable": {
@@ -146,19 +140,19 @@
 			"name": "entity.name.type.tasl.variable"
 		},
 		"optional": {
-			"begin": "\\?\\s*",
+			"begin": "(\\?)\\s*",
 			"beginCaptures": {
-				"0": { "name": "keyword.operator" }
+				"1": { "name": "keyword.operator" }
 			},
 			"end": "$",
-			"patterns": [{ "include": "#comment" }, { "include": "#expression" }]
+			"patterns": [{ "include": "#expression" }]
 		},
 		"namespaceURI": {
 			"match": "[a-z]+:[a-zA-Z0-9-._~:\\/?#\\[\\]@!$&'()*+,;%=]+",
 			"name": "markup.underline.link"
 		},
-		"key": {
-			"match": "[a-z]+:[a-zA-Z0-9-._~:\\/?#\\[\\]@!$&'()*+,;%=]+",
+		"term": {
+			"match": "[a-zA-Z][a-zA-Z0-9]*:(?:[A-Za-z0-9\\-._~!$&'()*+,;=:@/?]|%[0-9A-Fa-f]{2})+",
 			"name": "entity.name"
 		}
 	}
