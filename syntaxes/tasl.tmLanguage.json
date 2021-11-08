@@ -19,12 +19,11 @@
 			}
 		},
 		"namespace": {
-			"match": "(?:^\\s*)(namespace\\b)(.*)",
+			"match": "(?:^\\s*)(namespace)\\b(.*)",
 			"captures": {
 				"1": { "name": "keyword.control.tasl.namespace" },
 				"2": {
 					"patterns": [
-						{ "include": "#comment" },
 						{ "include": "#namespaceURI" },
 						{ "match": "[a-zA-Z][a-zA-Z0-9]*\\b", "name": "entity.name" }
 					]
@@ -32,7 +31,7 @@
 			}
 		},
 		"type": {
-			"begin": "(?:^\\s*)(type\\b)",
+			"begin": "(?:^\\s*)(type)\\b",
 			"beginCaptures": {
 				"1": { "name": "keyword.control.tasl.type" }
 			},
@@ -40,25 +39,25 @@
 			"patterns": [{ "include": "#expression" }]
 		},
 		"class": {
-			"begin": "(?:^\\s*)(class\\b)",
+			"begin": "(?:^\\s*)(class)\\b",
 			"beginCaptures": {
 				"1": { "name": "keyword.control.tasl.class" }
 			},
 			"end": "$",
 			"patterns": [
-				{ "include": "#term" },
+				{ "include": "#key" },
 				{ "include": "#export" },
 				{ "include": "#expression" }
 			]
 		},
 		"edge": {
-			"begin": "(?:^\\s*)(edge\\b)",
+			"begin": "(?:^\\s*)(edge)\\b",
 			"beginCaptures": {
 				"1": { "name": "keyword.control.tasl.edge" }
 			},
 			"end": "$",
 			"patterns": [
-				{ "include": "#term" },
+				{ "include": "#key" },
 				{ "include": "#export" },
 				{ "match": "=/", "name": "punctuation.separator.tasl.edge.source" },
 				{ "match": "/=>", "name": "punctuation.separator.tasl.edge.target" },
@@ -78,15 +77,15 @@
 				{ "include": "#coproduct" },
 				{ "include": "#reference" },
 				{ "include": "#optional" },
-				{ "include": "#variable" }
+				{ "include": "#identifier" }
 			]
 		},
 		"literal": {
-			"patterns": [{ "include": "#term" }]
+			"patterns": [{ "include": "#datatype" }]
 		},
 		"uri": {
 			"match": "<>",
-			"name": "constant.language.tasl.uri"
+			"name": "variable.other.constant"
 		},
 		"product": {
 			"begin": "{",
@@ -100,12 +99,16 @@
 			"patterns": [
 				{ "include": "#comment" },
 				{ "include": "#term" },
-				{
-					"match": "->",
-					"name": "punctuation.separator.tasl.component"
-				},
-				{ "include": "#expression" }
+				{ "include": "#component" }
 			]
+		},
+		"component": {
+			"begin": "->",
+			"end": "$",
+			"beginCaptures": {
+				"0": { "name": "punctuation.separator.tasl.component" }
+			},
+			"patterns": [{ "include": "#expression" }]
 		},
 		"coproduct": {
 			"begin": "\\[",
@@ -121,28 +124,34 @@
 			"patterns": [
 				{ "include": "#comment" },
 				{ "include": "#term" },
-				{
-					"match": "<-",
-					"name": "punctuation.separator.tasl.option"
-				},
-				{ "include": "#expression" }
+				{ "include": "#option" }
 			]
 		},
+		"option": {
+			"begin": "<-",
+			"end": "$",
+			"beginCaptures": {
+				"0": { "name": "punctuation.separator.tasl.option" }
+			},
+			"patterns": [{ "include": "#expression" }]
+		},
 		"reference": {
-			"match": "(\\*)\\s*(\\S+)",
+			"match": "(\\*)\\s*(.*)",
 			"captures": {
-				"1": { "name": "keyword.operator" },
-				"2": { "patterns": [{ "include": "#term" }] }
+				"1": { "name": "markup.bold keyword.operator" },
+				"2": { "patterns": [{ "include": "#key" }] }
 			}
 		},
-		"variable": {
-			"match": "[a-zA-Z][a-zA-Z0-9]*\\b",
-			"name": "entity.name.type.tasl.variable"
+		"identifier": {
+			"match": "([a-zA-Z][a-zA-Z0-9]*)\\b",
+			"captures": {
+				"1": { "name": "variable" }
+			}
 		},
 		"optional": {
-			"begin": "(\\?)\\s*",
+			"begin": "\\?",
 			"beginCaptures": {
-				"1": { "name": "keyword.operator" }
+				"0": { "name": "keyword.operator" }
 			},
 			"end": "$",
 			"patterns": [{ "include": "#expression" }]
@@ -151,9 +160,17 @@
 			"match": "[a-z]+:[a-zA-Z0-9-._~:\\/?#\\[\\]@!$&'()*+,;%=]+",
 			"name": "markup.underline.link"
 		},
+		"key": {
+			"match": "[a-zA-Z][a-zA-Z0-9]*:(?:[A-Za-z0-9\\-._~!$&'()*+,;=:@/?]|%[0-9A-Fa-f]{2})+",
+			"name": "markup.bold entity.name.class"
+		},
+		"datatype": {
+			"match": "[a-zA-Z][a-zA-Z0-9]*:(?:[A-Za-z0-9\\-._~!$&'()*+,;=:@/?]|%[0-9A-Fa-f]{2})+",
+			"name": "string.regexp"
+		},
 		"term": {
 			"match": "[a-zA-Z][a-zA-Z0-9]*:(?:[A-Za-z0-9\\-._~!$&'()*+,;=:@/?]|%[0-9A-Fa-f]{2})+",
-			"name": "entity.name"
+			"name": "entity.other.tasl.key"
 		}
 	}
 }
